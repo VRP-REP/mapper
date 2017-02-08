@@ -1,7 +1,7 @@
 var data;
 var instanceRead = false;
 var instanceName = "";
-var route = [];
+var routes = [[]];
 var circleRadius;
 var x;
 var y;
@@ -19,53 +19,33 @@ d3.select("#instance-upload").on("change", function () {
             d3.select("#div-where-instance-goes").html("");
             instanceRead = false;
             data = null;
-            route = [];
-
-            // see if passed data is in VRP-REP (xml-type) format
-            var isXML = filereader.result.startsWith("<?xml")?true:false;
+            routes = [[]];
 
             // read instance
-            if (isXML) {
-                var parser = new DOMParser();
-                var xmlDoc = parser.parseFromString(filereader.result,"text/xml");
-                var nodes = xmlDoc.getElementsByTagName("node");
-                data = [];
-                for (var i=0; i<nodes.length; i++){
-                    data.push({
-                        cstype:0, // placeholder. Indicates fast-charging CS. I assume most (all?) VRP-REP instances don't contain this info
-                        id:+nodes[i].id,
-                        name:"node-"+nodes[i].id,
-                        type:nodes[i].attributes.type.nodeValue,
-                        x:+nodes[i].getElementsByTagName("cx")[0].textContent,
-                        y:+nodes[i].getElementsByTagName("cy")[0].textContent
-                    });
-                }
-            } else {
-                var instancetext = d3.dsvFormat(" ").parseRows(filereader.result);
-
-                // parse and store node data
-                data = instancetext.filter(function (e, i, arr) { return e.length === 6 })
-                    .map(function (e) {
-                        return {
-                            id: +e[0],
-                            name: e[1],
-                            x: +e[2],
-                            y: +e[3],
-                            type: e[4],
-                            cstype: +e[5]
-                        }
-                    });
+            var parser = new DOMParser();
+            var xmlDoc = parser.parseFromString(filereader.result,"text/xml");
+            var nodes = xmlDoc.getElementsByTagName("node");
+            data = [];
+            for (var i=0; i<nodes.length; i++){
+                data.push({
+                    id:+nodes[i].id,
+                    name:"node-"+nodes[i].id,
+                    type:nodes[i].attributes.type.nodeValue,
+                    x:+nodes[i].getElementsByTagName("cx")[0].textContent,
+                    y:+nodes[i].getElementsByTagName("cy")[0].textContent
+                });
             }
 
             // set the flag for whether an instance has been readAsText
             instanceRead = true;
 
             // enable the route plotting modal
-            d3.select("#route-input")
-                .attr("disabled",null)
-                .attr("placeholder","0 1 2 3 0");
-            d3.select("#plot-route-btn")
+            d3.selectAll(".enable-on-instance-upload")
                 .attr("disabled",null);
+            d3.select("#route-input")
+                .attr("placeholder","Integers separated by commas or whitespace (e.g. \"0 1 2 3 0\")");
+            d3.select("#sol-upload-btn-text")
+                .text("");
 
             // set the banner above the SVG
             d3.select("#div-where-instance-goes")
@@ -74,6 +54,21 @@ d3.select("#instance-upload").on("change", function () {
 
             // make the viz
             makeViz(data);
+
+            // define the arrowhead marker for later route plotting
+            var defs = svg.append("defs")
+            defs.append("marker")
+                .attr("id","arrow")
+                .attr("viewBox","0 -5 10 10")
+                .attr("refX",5)
+                .attr("refY",0)
+                .attr("markerWidth",4)
+                .attr("markerHeight",4)
+                .attr("orient","auto")
+                .append("path")
+                    .attr("d", "M0,-5L10,0L0,5")
+                    .attr("class","arrowHead")
+                    .attr("stroke","black");
 
         }
         filereader.readAsText(this.files[0]);
@@ -146,33 +141,48 @@ var makeViz = function (data) {
         .call(legendOrdinal);
 }
 
-var plotRoute = function(routeString) {
-    // remove any previous route
-    route = [];
-    d3.selectAll(".arrow").remove();
+// User-uploaded solution
+d3.select("#solution-upload").on("change", function () {
+    if (window.File && window.FileReader && window.FileList && window.Blob) {
+        var filereader = new window.FileReader();
+        filereader.onload = function () {
 
-    // in case the string was a pasted EVRO route, remove charging decisions
-    routeString = routeString.replace(/\s+\([^)]*\),?[\s+]?/gm,"\t");
+            removeExistingRoutes();
+
+            // read solution
+            var parser = new DOMParser();
+            var xmlDoc = parser.parseFromString(filereader.result,"text/xml");
+            // TODO store each route
+            // and for each route
+            // TODO plot it
+
+        }
+        $('#uploadSolutionModal').modal('hide');
+        filereader.readAsText(this.files[0]);
+    } else { console.log("Error with file upload. Please try again."); }
+});
+
+var handleManualRouteInput = function(routeString) {
+
+    // clear evidence of existing routes
+    removeExistingRoutes();    
+
     // strip away leading and trailing whitespace (or brackets)
     routeString = routeString.replace(/^\[?(\s+)?|(\s+)?\]?$/gm,'');
-    // break into array of ints on whitespace and/or commas
-    route = routeString.split(/[,\s]/gm).map(Number);
+    // break into array of ints on whitespace or commas
+    routes[0] = routeString.split(/[,\s]/gm).map(Number);
 
-    // define the arrow marker
-    var defs = svg.append("defs")
-    defs.append("marker")
-        .attr("id","arrow")
-        .attr("viewBox","0 -5 10 10")
-        .attr("refX",5)
-        .attr("refY",0)
-        .attr("markerWidth",4)
-        .attr("markerHeight",4)
-        .attr("orient","auto")
-        .append("path")
-            .attr("d", "M0,-5L10,0L0,5")
-            .attr("class","arrowHead")
-            .attr("stroke","black");
+    // plot the route
+    plotRoute(routes[0]);
 
+}
+
+var removeExistingRoutes = function() {
+    routes = [[]];
+    d3.selectAll(".arrow").remove();
+}
+
+var plotRoute = function (route) {
     // draw arrows between consecutive nodes on route
     for (var i=1; i<route.length;i++){
         // nodes' IDs
@@ -200,5 +210,4 @@ var plotRoute = function(routeString) {
             .attr("class","arrow")
             .attr("marker-end","url(#arrow)");
     }
-
 }
