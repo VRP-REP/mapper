@@ -60,23 +60,22 @@
           </div>
           <div class="modal-body">
             <p>
-                You may either upload a VRP-REP compliant solution or you may manually enter a sequence of nodes.
-                These are integers separated by commas or whitespace.
+                You may either upload a VRP-REP compliant solution (<em>coming soon!</em>) or you may manually enter a sequence of nodes.
             </p>
             <div class="form-group">
               <label>Upload VRP-REP compliant solution:</label><br>
-              <label class="btn btn-default btn-file" disabled>
+              <label id="btn-for-sol-upload" class="enable-on-instance-upload btn btn-default btn-file" disabled>
                 Browse <input id="solution-upload" type="file" style="display: none;">
               </label>
-              <span id="sol-upload-btn-text" style="color: red;font-style: italic;">Coming soon!</span>
+              <span id="sol-upload-btn-text" style="font-style: italic;">First upload an instance</span>
             </div>
             <div class="form-group">
                 <label for="route-input">Route:</label>
-                <input type="text" class="form-control" id="route-input" placeholder="First upload an instance" disabled>
+                <input type="text" class="enable-on-instance-upload form-control" id="route-input" placeholder="First upload an instance" disabled>
             </div>
           </div>
           <div class="modal-footer">
-            <button onclick="plotRoute(document.getElementById('route-input').value)" id="plot-route-btn" type="button" class="btn btn-default" data-dismiss="modal" disabled>
+            <button onclick="handleManualRouteInput(document.getElementById('route-input').value)" id="plot-route-btn" type="button" class="enable-on-instance-upload btn btn-default" data-dismiss="modal" disabled>
                 Plot
             </button>
           </div>
