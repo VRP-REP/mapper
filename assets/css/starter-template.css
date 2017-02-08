@@ -1,0 +1,14 @@
+body {
+  padding-top: 60px;
+}
+.map-zone {
+  padding: 40px 15px;
+  text-align: center;
+  border: solid 1px #eee !important;
+  border-bottom: solid 1px #ccc !important;
+}
+
+.nav-label {
+  all:inherit;
+  padding: 0px 0px;
+}

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="assets/images/evro_icon.png">
+
+    <title>Starter Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/starter-template.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <span class="navbar-brand">Instance Mapper</span>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li>
+                <a href="#">
+                <label class="nav-label">Upload instance<input id="instance-upload" type="file" style="display: none;"></label>
+                </a>
+            </li>
+            <li><a data-toggle="modal" href="#uploadSolutionModal">Upload solution</a></li>
+            <li><a href="../../">eVRO Utilities Home</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+
+      <div class="map-zone" id="div-where-instance-goes">
+          
+      </div>
+
+    </div><!-- /.container -->
+
+    <!-- Upload Solution Modal -->
+    <div id="uploadSolutionModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h3 class="modal-title">Upload solution</h3>
+          </div>
+          <div class="modal-body">
+            <p>
+                You may either manually enter a sequence of nodes or you may upload a VRP-REP compliant solution.
+                These are integers separated by commas or whitespace.
+            </p>
+            <div class="form-group">
+                <label for="route-input">Route:</label>
+                <input type="text" class="form-control" id="route-input" placeholder="First upload an instance" disabled>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button onclick="plotRoute(document.getElementById('route-input').value)" id="plot-route-btn" type="button" class="btn btn-default" data-dismiss="modal" disabled>
+                Plot
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- D3 -->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <!-- For the legend -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.21.0/d3-legend.js"></script>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+
+    <!-- Custom JS for the instance mapping -->
+    <script src="assets/js/instancemapper.js"></script>
+
+  </body>
+</html>
