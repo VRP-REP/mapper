@@ -102,7 +102,32 @@
           <h3 class="modal-title">About the VRP-REP Mapper</h3>
         </div>
         <div class="modal-body">
-          COME BACK TO ME
+          <p>Mapper let's users visualize datasets (problem instances) and solutions (routes) that are formatted according to
+            the Vehicle Routing Problem REPository (VRP-REP) specification.</p>
+
+          <p>More about VRP-REP and the specification can be found on their <a href="http://vrp-rep.org/">website</a>.</p>
+
+          <h3 id="touse">To use</h3>
+
+          <p>From the <a href="https://vrp-rep.github.io/mapper/">Mapper landing page</a>, select "Upload instance" to browse
+            to and select a VRP-REP compliant dataset.</p>
+
+          <p><img style="height: auto;width: 100%;" src="./assets/images/uploadInstance.PNG" alt="Upload instance" title="Upload instance" /></p>
+
+          <p>Once you have uploaded an instance, the upload solution functionality becomes available. Select "Upload solution."</p>
+
+          <p><img style="height: auto;width: 100%;" src="./assets/images/uploadSolution.PNG" alt="Upload solution" title="Upload solution" /></p>
+
+          <p>From the modal that appears, you have two options to input a solution (a route or set of routes):</p>
+
+          <ol>
+            <li>You may select "Browse" to select a VRP-REP compliant dataset, or</li>
+
+            <li>You may simply input a sequence of integers into the text field. This sequence of integers should be separated
+              either by commas or whitespace. After you input a sequence, hit the "Plot" button.</li>
+          </ol>
+
+          <p>Note that whenever a new solution is uploaded or a new route is entered, the existing routes will be cleared.</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
