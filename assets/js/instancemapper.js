@@ -241,22 +241,42 @@ var plotRoute = function(route,color) {
         // nodes' data entries
         var srcNode = data.filter(function(d){return d.id == srcID;})[0],
             destNode = data.filter(function(d){return d.id == destID;})[0];
-        // TODO make flag for overlapping circles
-        // -- currently if circles overlap, it looks like arrow is backwards
-        var circlesOverlap = false;
-        if (circlesOverlap) {var x1=destNode.x,y1=destNode.y,x2=srcNode.x,y2=srcNode.y;}
-        else                {var x1=srcNode.x,y1=srcNode.y,x2=destNode.x,y2=destNode.y;}
+
+        var x1=srcNode.x,
+            y1=srcNode.y,
+            x2=destNode.x,
+            y2=destNode.y;
 
         // angle between the nodes
         var theta = Math.atan2((y(y2)-y(y1)),(x(x2)-x(x1)));
 
+        // determine whether the circles for the nodes overlap
+        var distBetweenNodes = Math.sqrt(Math.pow((x(x1)-x(x2)),2)+Math.pow((y(y1)-y(y2)),2));
+        var nodesOverlap = (distBetweenNodes < 2*circleRadius)?true:false;
+
+        // where to put endpoints for the connecting arrow
+        var plotPoints = {};
+
+        // if so, we reverse the points x1,y1 and x2,y2
+        if (nodesOverlap) {
+            plotPoints.x2 = x(x1)+circleRadius*Math.cos(theta),
+            plotPoints.y2 = y(y1)+circleRadius*Math.sin(theta),
+            plotPoints.x1 = x(x2)+circleRadius*Math.cos(theta+Math.PI),
+            plotPoints.y1 = y(y2)+circleRadius*Math.sin(theta+Math.PI)
+        } else {
+            plotPoints.x1 = x(x1)+circleRadius*Math.cos(theta),
+            plotPoints.y1 = y(y1)+circleRadius*Math.sin(theta),
+            plotPoints.x2 = x(x2)+circleRadius*Math.cos(theta+Math.PI),
+            plotPoints.y2 = y(y2)+circleRadius*Math.sin(theta+Math.PI)
+        }
+
         // draw line
         maing.append("line")
             .style("stroke",color)
-            .attr("x1",x(x1)+circleRadius*Math.cos(theta))
-            .attr("x2",x(x2)+circleRadius*Math.cos(theta+Math.PI))
-            .attr("y1",y(y1)+circleRadius*Math.sin(theta))
-            .attr("y2",y(y2)+circleRadius*Math.sin(theta+Math.PI))
+            .attr("x1",plotPoints.x1)
+            .attr("x2",plotPoints.x2)
+            .attr("y1",plotPoints.y1)
+            .attr("y2",plotPoints.y2)
             .attr("id",function(){return "line-"+(i-1)+"-"+i;})
             .attr("class","arrow")
             .attr("marker-end","url(#arrow)");
