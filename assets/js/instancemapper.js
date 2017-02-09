@@ -1,12 +1,16 @@
 var data;
 var instanceRead = false;
 var instanceName = "";
-var routes = [[]];
+var routes = [];
 var circleRadius;
 var x;
 var y;
 var svg;
 var maing;
+// viz sizes
+var margin =  {top: 100, right: 50, bottom: 20, left: 100};
+var width = 764 - margin.left - margin.right;
+var height =  500 - margin.top - margin.bottom;
 
 
 // User-uploaded instance
@@ -19,7 +23,7 @@ d3.select("#instance-upload").on("change", function () {
             d3.select("#div-where-instance-goes").html("");
             instanceRead = false;
             data = null;
-            routes = [[]];
+            routes = [];
 
             // read instance
             var parser = new DOMParser();
@@ -77,11 +81,6 @@ d3.select("#instance-upload").on("change", function () {
 });
 
 var makeViz = function (data) {
-    
-    // viz sizes
-    var margin =  {top: 100, right: 50, bottom: 20, left: 100};
-    var width = 764 - margin.left - margin.right;
-    var height =  500 - margin.top - margin.bottom;
 
     // define circle radius based on width
     circleRadius = .02*width;
@@ -152,10 +151,22 @@ d3.select("#solution-upload").on("change", function () {
             // read solution
             var parser = new DOMParser();
             var xmlDoc = parser.parseFromString(filereader.result,"text/xml");
-            // TODO store each route
+            var solNode = xmlDoc.getElementsByTagName("solution")[0];
+            // store routes
+            var routeNodes = solNode.getElementsByTagName("route");
             // and for each route
-            // TODO plot it
-
+            for (var i=0; i<routeNodes.length; i++) {
+                var routeNode = routeNodes[i];
+                // get the id and stops
+                var route = {
+                    id:+routeNodes[i].id,
+                    sequence:getRoute(routeNode)
+                };
+                // add it to routes object
+                routes.push(route);
+            }
+            // plot the routes
+            plotRoutes(routes);
         }
         $('#uploadSolutionModal').modal('hide');
         filereader.readAsText(this.files[0]);
@@ -170,19 +181,58 @@ var handleManualRouteInput = function(routeString) {
     // strip away leading and trailing whitespace (or brackets)
     routeString = routeString.replace(/^\[?(\s+)?|(\s+)?\]?$/gm,'');
     // break into array of ints on whitespace or commas
-    routes[0] = routeString.split(/[,\s]/gm).map(Number);
+    routes.push({
+        id:0,
+        sequence:routeString.split(/[,\s]/gm).map(Number)
+    });
 
     // plot the route
-    plotRoute(routes[0]);
+    plotRoutes(routes);
 
 }
 
 var removeExistingRoutes = function() {
-    routes = [[]];
+    routes = [];
     d3.selectAll(".arrow").remove();
+    d3.select("#routesLegend-g").remove();
 }
 
-var plotRoute = function (route) {
+var plotRoutes = function (routes) {
+
+    // if there's only one route, simply plot it in black
+    if (routes.length == 1){
+
+        plotRoute(routes[0].sequence,"black");
+
+    } else { // otherwise, we'll be plotting multiple, so we need diff colors and a legend
+
+        // define scale for route colors
+        var color = d3.scaleOrdinal(d3.schemeDark2).domain(routes.map(function(e){return e.id;}));
+
+        // plot them
+        routes.forEach(function(e) {plotRoute(e.sequence,color(e.id));});
+
+        // make the legend
+        maing.append("g")
+            .attr("class", "legendRoutes")
+            .attr("id", "routesLegend-g")
+            .attr("transform", "translate("+(-margin.left+width/2)+","+(-3*margin.top/4)+")");
+
+        var legendRoutes = d3.legendColor()
+            .scale(4)
+            .shape("line")
+            .shapePadding(10)
+            .orient("horizontal")
+            .labelAlign("middle")
+            .scale(color)
+            .labels(color.domain());
+
+        maing.select(".legendRoutes")
+            .call(legendRoutes);
+    }
+}
+
+var plotRoute = function(route,color) {
     // draw arrows between consecutive nodes on route
     for (var i=1; i<route.length;i++){
         // nodes' IDs
@@ -191,17 +241,18 @@ var plotRoute = function (route) {
         // nodes' data entries
         var srcNode = data.filter(function(d){return d.id == srcID;})[0],
             destNode = data.filter(function(d){return d.id == destID;})[0];
-        var x1 = srcNode.x,
-            y1 = srcNode.y,
-            x2 = destNode.x,
-            y2 = destNode.y;
+        // TODO make flag for overlapping circles
+        // -- currently if circles overlap, it looks like arrow is backwards
+        var circlesOverlap = false;
+        if (circlesOverlap) {var x1=destNode.x,y1=destNode.y,x2=srcNode.x,y2=srcNode.y;}
+        else                {var x1=srcNode.x,y1=srcNode.y,x2=destNode.x,y2=destNode.y;}
 
         // angle between the nodes
         var theta = Math.atan2((y(y2)-y(y1)),(x(x2)-x(x1)));
 
         // draw line
         maing.append("line")
-            .style("stroke","black")
+            .style("stroke",color)
             .attr("x1",x(x1)+circleRadius*Math.cos(theta))
             .attr("x2",x(x2)+circleRadius*Math.cos(theta+Math.PI))
             .attr("y1",y(y1)+circleRadius*Math.sin(theta))
@@ -210,4 +261,13 @@ var plotRoute = function (route) {
             .attr("class","arrow")
             .attr("marker-end","url(#arrow)");
     }
+}
+
+var getRoute = function(routeNode) {
+    var result = [];
+    var nodes = routeNode.getElementsByTagName("node");
+    for (var i=0; i<nodes.length; i++){
+        result.push(+nodes[i].id);
+    }
+    return result;
 }
