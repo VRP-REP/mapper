@@ -305,3 +305,19 @@ var loadNewSolutionFile = function (fileAsText) {
     // plot the routes
     plotRoutes(routes);
 }
+
+var loadSampleData = function() {
+    var dataFile = "data/tc2c10s2cf0.xml",
+        solFile = "data/tc2c10s2cf0_MIP (1).xml";
+    $('#sampleDataModal').modal('hide');
+    instanceName = dataFile.substring(dataFile.indexOf("/")+1);
+
+    d3.text(dataFile, function(error_data, dataAsText) {
+        if (error_data) throw error_data;
+        loadNewInstanceFile(dataAsText);
+        d3.text(solFile, function(error_sol, solAsText) {
+            if (error_sol) throw error_sol;
+            loadNewSolutionFile(solAsText);
+        });
+    });
+}
