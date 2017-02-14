@@ -1,7 +1,7 @@
 # Mapper
-Mapper let's users visualize datasets (problem instances) and solutions (routes) that are formatted according to the Vehicle Routing Problem REPository (VRP-REP) specification.
+Mapper let's users visualize datasets (problem instances) and solutions (routes) that are formatted according to the Vehicle Routing Problem REPository (VRP-REP) specifications.
 
-More about VRP-REP and the specification can be found on their [website](http://vrp-rep.org/).
+More about VRP-REP and the specification can be found on our [website](http://vrp-rep.org/).
 
 In this readme:
  - [How to use Mapper if you don't have your own data](#dont-have-data)
