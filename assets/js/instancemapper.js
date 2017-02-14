@@ -307,8 +307,8 @@ var loadNewSolutionFile = function (fileAsText) {
 }
 
 var loadSampleData = function() {
-    var dataFile = "data/tc2c10s2cf0.xml",
-        solFile = "data/tc2c10s2cf0_MIP (1).xml";
+    var dataFile = "data/CMT01_dataset.xml",
+        solFile = "data/CMT01_solution.xml";
     $('#sampleDataModal').modal('hide');
     instanceName = dataFile.substring(dataFile.indexOf("/")+1);
 
