@@ -16,15 +16,17 @@
   <!-- Custom styles for this template -->
   <link href="assets/css/starter-template.css" rel="stylesheet">
   <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+      (i[r].q = i[r].q || []).push(arguments)    
+}, i[r].l = 1 * new Date(); a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
     ga('create', 'UA-67398705-6', 'auto');
     ga('send', 'pageview');
 
-</script>
+  </script>
 
 </head>
 
@@ -76,8 +78,7 @@
         </div>
         <div class="modal-body">
           <p>
-            You may either upload a VRP-REP compliant solution or you may manually enter a sequence
-            of nodes.
+            You may either upload a VRP-REP compliant solution or you may manually enter a sequence of nodes.
           </p>
           <div class="form-group">
             <label>Upload VRP-REP compliant solution:</label><br>
@@ -124,7 +125,8 @@
               </label>
           </div>
           <p>
-            You can also download the original sources for the sample data, which come from the CMT01 instance from Christofides <i>et al</i>. (1979).
+            You can also download the original sources for the sample data, which come from the CMT01 instance from Christofides <i>et al</i>.
+            (1979).
           </p>
           <div class="form-group">
             <label>Download sample data files:</label><br>
@@ -157,76 +159,100 @@
           <h3 class="modal-title">About the VRP-REP Mapper</h3>
         </div>
         <div class="modal-body">
-          <p>Mapper let's users visualize datasets (problem instances) and solutions (routes) that are formatted according to the Vehicle Routing Problem REPository (VRP-REP) specifications.</p>
+          <p>Mapper let's users visualize datasets (problem instances) and solutions (routes) that are formatted according to
+            the Vehicle Routing Problem REPository (VRP-REP) specifications.</p>
 
-<p>More about VRP-REP and the specification can be found on our <a href="http://vrp-rep.org/">website</a>.</p>
+          <p>More about VRP-REP and the specification can be found on our <a href="http://vrp-rep.org/">website</a>.</p>
 
-<p>Jump to</p>
+          <p>Jump to</p>
 
-<ul>
-<li><a href="#dont-have-data">How to use Mapper if you don't have your own data</a></li>
+          <ul>
+            <li><a href="#dont-have-data">How to use Mapper if you don't have your own data</a></li>
 
-<li><a href="#do-have-data">How to use Mapper if you do have your own data</a></li>
+            <li><a href="#do-have-data">How to use Mapper if you do have your own data</a></li>
 
-<li><a href="#sol-format">The VRP-REP solution format</a></li>
-</ul>
+            <li><a href="#sol-format">The VRP-REP solution format</a></li>
+          </ul>
 
-<h2 id="touse">To use</h2>
+          <h2 id="touse">To use</h2>
 
-<p><a name="dont-have-data"></a></p>
+          <p>
+            <a name="dont-have-data"></a>
+          </p>
 
-<h3 id="ifyoudonthaveyourowndata">If you don't have your own data</h3>
+          <h3 id="ifyoudonthaveyourowndata">If you don't have your own data</h3>
 
-<p>If you don't already have VRP-REP compliant datasets or solutions, select "Sample data".
-<em>Screenshot coming soon!</em></p>
+          <p>If you don't already have VRP-REP compliant datasets or solutions, select "Sample data".</p>
+          <p><img style="height: auto;width: 100%;" src="./assets/images/sampleData.PNG" alt="Sample data" title="Sample data"
+            /></p>
 
-<p>From here, select "Plot sample dataset and solution" to view the Christofides <em>et al.</em> (1979) CMT01 instance and its solution.</p>
+          <p>From here, select "Plot sample dataset and solution" to view the Christofides <em>et al.</em> (1979) CMT01 instance
+            and its solution.</p>
 
-<p>You can also choose to download the source files for sample data using the "Download" button.</p>
+          <p>You can also choose to download the source files for sample data using the "Download" button.</p>
 
-<p><a name="do-have-data"></a></p>
+          <p>
+            <a name="do-have-data"></a>
+          </p>
 
-<h3 id="ifyoudohaveyourowndata">If you do have your own data</h3>
+          <h3 id="ifyoudohaveyourowndata">If you do have your own data</h3>
 
-<p>If you have your own VRP-REP compliant instances and solutions, then from the <a href="https://vrp-rep.github.io/mapper/">Mapper landing page</a>, first select "Upload instance" to browse to and select a VRP-REP compliant dataset.
-<em>Updated screenshot coming soon!</em></p>
+          <p>If you have your own VRP-REP compliant instances and solutions, then from the <a href="https://vrp-rep.github.io/mapper/">Mapper landing page</a>,
+            first select "Upload instance" to browse to and select a VRP-REP compliant dataset.</p>
 
-<p><img style="height: auto;width: 100%;" src="./assets/images/uploadInstance.PNG" alt="Upload instance" title="Upload instance" /></p>
+          <p><img style="height: auto;width: 100%;" src="./assets/images/uploadInstance.PNG" alt="Upload instance" title="Upload instance"
+            /></p>
 
-<p>Once you have uploaded an instance, the upload solution functionality becomes available.
-Select "Upload solution."
-<em>Updated screenshot coming soon!</em></p>
+          <p>Once you have uploaded an instance, the upload solution functionality becomes available. Select "Upload solution."</p>
 
-<p><img style="height: auto;width: 100%;" src="./assets/images/uploadSolution.PNG" alt="Upload solution" title="Upload solution" /></p>
+          <p><img style="height: auto;width: 100%;" src="./assets/images/uploadSolution.PNG" alt="Upload solution" title="Upload solution"
+            /></p>
 
-<p>From the modal that appears, you have two options to input a solution (a route or set of routes):</p>
+          <p>From the modal that appears, you have two options to input a solution (a route or set of routes):</p>
 
-<ol>
-<li>You may select "Browse" to select a VRP-REP compliant solution, or</li>
+          <ol>
+            <li>You may select "Browse" to select a VRP-REP compliant solution, or</li>
 
-<li>You may simply input a sequence of integers into the text field. This sequence of integers should be separated either by commas or whitespace. After you input a sequence, hit the "Plot" button.</li>
-</ol>
+            <li>You may simply input a sequence of integers into the text field. This sequence of integers should be separated
+              either by commas or whitespace. After you input a sequence, hit the "Plot" button.</li>
+          </ol>
 
-<p>Note that whenever a new solution is uploaded or a new route is entered, the existing routes will be cleared.</p>
+          <p>Note that whenever a new solution is uploaded or a new route is entered, the existing routes will be cleared.</p>
 
-<p><a name="sol-format"></a></p>
+          <p>
+            <a name="sol-format"></a>
+          </p>
 
-<h2 id="thevrprepsolutionformat">The VRP-REP Solution Format</h2>
+          <h2 id="thevrprepsolutionformat">The VRP-REP Solution Format</h2>
 
-<p>The XML schema defining the VRP-REP solution format is <a href="http://vrp-rep.org/resources/download/6">available here</a>.</p>
+          <p>The XML schema defining the VRP-REP solution format is <a href="http://vrp-rep.org/resources/download/6">available here</a>.</p>
 
-<p>A description of the format:</p>
+          <p>A description of the format:</p>
 
-<ul>
-<li><p>The root element must be a <code>&lt;solution&gt;</code> element, and it must contain a string attribute identifying the <code>instance</code> (<code>method</code> is optional).</p></li>
+          <ul>
+            <li>
+              <p>The root element must be a <code>&lt;solution&gt;</code> element, and it must contain a string attribute identifying
+                the <code>instance</code> (<code>method</code> is optional).</p>
+            </li>
 
-<li><p>Within <code>&lt;solution&gt;</code> must be at least one <code>&lt;route&gt;</code> element with a mandatory and unique <code>id</code> attribute (integer). <code>&lt;route&gt;</code> elements may also contain any other attributes you want to add. For example, if your file reports the solution to a VRP with a limited fleet, you can add an attribute <code>vehicle_id='X'</code> to the <code>&lt;route&gt;</code> element, indicating that the route is serviced by vehicle 'X'.</p></li>
+            <li>
+              <p>Within <code>&lt;solution&gt;</code> must be at least one <code>&lt;route&gt;</code> element with a mandatory
+                and unique <code>id</code> attribute (integer). <code>&lt;route&gt;</code> elements may also contain any
+                other attributes you want to add. For example, if your file reports the solution to a VRP with a limited
+                fleet, you can add an attribute <code>vehicle_id='X'</code> to the <code>&lt;route&gt;</code> element, indicating
+                that the route is serviced by vehicle 'X'.</p>
+            </li>
 
-<li><p>Within <code>&lt;route&gt;</code> must be at least 2 <code>&lt;node&gt;</code>s, each with a mandatory <code>id</code> attribute (integer). <code>&lt;node&gt;</code>elements may contain any child elements you wish to add. For example, if your file reports the solution to a VRP with split delivery, you can add to the <code>&lt;node&gt;</code> element a <code>&lt;quantity&gt;X&lt;/quantity&gt;</code> child, indicating that the route services X units of the node's demand.</p></li>
-</ul>
+            <li>
+              <p>Within <code>&lt;route&gt;</code> must be at least 2 <code>&lt;node&gt;</code>s, each with a mandatory <code>id</code>                attribute (integer). <code>&lt;node&gt;</code>elements may contain any child elements you wish to add. For
+                example, if your file reports the solution to a VRP with split delivery, you can add to the <code>&lt;node&gt;</code>                element a <code>&lt;quantity&gt;X&lt;/quantity&gt;</code> child, indicating that the route services X units
+                of the node's demand.</p>
+            </li>
+          </ul>
 
-<p>A sample solution file:
-<em>snippet of CMT01 solution file coming soon!</em></p>
+          <p>A sample solution file:</p>
+          <p><img style="height: auto;width: 100%;" src="./assets/images/solFileSnippet.PNG" alt="Example solution file" title="Example solution file"
+            /></p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
