@@ -93,27 +93,8 @@ d3.select("#solution-upload").on("change", function () {
         var filereader = new window.FileReader();
         filereader.onload = function () {
 
-            removeExistingRoutes();
+            loadNewSolutionFile(filereader.result);
 
-            // read solution
-            var parser = new DOMParser();
-            var xmlDoc = parser.parseFromString(filereader.result,"text/xml");
-            var solNode = xmlDoc.getElementsByTagName("solution")[0];
-            // store routes
-            var routeNodes = solNode.getElementsByTagName("route");
-            // and for each route
-            for (var i=0; i<routeNodes.length; i++) {
-                var routeNode = routeNodes[i];
-                // get the id and stops
-                var route = {
-                    id:+routeNodes[i].id,
-                    sequence:getRoute(routeNode)
-                };
-                // add it to routes object
-                routes.push(route);
-            }
-            // plot the routes
-            plotRoutes(routes);
         }
         $('#uploadSolutionModal').modal('hide');
         filereader.readAsText(this.files[0]);
@@ -298,4 +279,29 @@ var loadNewInstanceFile = function(fileAsText) {
             .attr("d", "M0,-5L10,0L0,5")
             .attr("class","arrowHead")
             .attr("stroke","black");
+}
+
+var loadNewSolutionFile = function (fileAsText) {
+
+    removeExistingRoutes();
+
+    // read solution
+    var parser = new DOMParser();
+    var xmlDoc = parser.parseFromString(fileAsText,"text/xml");
+    var solNode = xmlDoc.getElementsByTagName("solution")[0];
+    // store routes
+    var routeNodes = solNode.getElementsByTagName("route");
+    // and for each route
+    for (var i=0; i<routeNodes.length; i++) {
+        var routeNode = routeNodes[i];
+        // get the id and stops
+        var route = {
+            id:+routeNodes[i].id,
+            sequence:getRoute(routeNode)
+        };
+        // add it to routes object
+        routes.push(route);
+    }
+    // plot the routes
+    plotRoutes(routes);
 }
