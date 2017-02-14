@@ -12,7 +12,10 @@ In this readme:
 <a name="dont-have-data"></a>
 ### If you don't have your own data
 If you don't already have VRP-REP compliant datasets or solutions, select "Sample data".
-*Screenshot coming soon!*
+
+![Sample data][sampleData]
+
+[sampleData]: ./assets/images/sampleData.PNG "Sample data"
 
 From here, select "Plot sample dataset and solution" to view the Christofides *et al.* (1979) CMT01 instance and its solution.
 
@@ -21,7 +24,6 @@ You can also choose to download the source files for sample data using the "Down
 <a name="do-have-data"></a>
 ### If you do have your own data
 If you have your own VRP-REP compliant instances and solutions, then from the [Mapper landing page](https://vrp-rep.github.io/mapper/), first select "Upload instance" to browse to and select a VRP-REP compliant dataset.
-*Updated screenshot coming soon!*
 
 ![Upload instance][uploadInstance]
 
@@ -29,7 +31,6 @@ If you have your own VRP-REP compliant instances and solutions, then from the [M
 
 Once you have uploaded an instance, the upload solution functionality becomes available.
 Select "Upload solution."
-*Updated screenshot coming soon!*
 
 ![Upload solution][uploadSolution]
 
@@ -53,4 +54,29 @@ A description of the format:
  - Within `<route>` must be at least 2 `<node>`s, each with a mandatory `id` attribute (integer). `<node>`elements may contain any child elements you wish to add. For example, if your file reports the solution to a VRP with split delivery, you can add to the `<node>` element a `<quantity>X</quantity>` child, indicating that the route services X units of the node's demand.
  
 A sample solution file:
-*snippet of CMT01 solution file coming soon!*
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<solution instance="CMT01">
+	<route id="1">
+		<node id="51"/>
+		<node id="46"/>
+		<node id="5"/>
+		<node id="49"/>
+		<node id="10"/>
+		<node id="39"/>
+		<node id="33"/>
+		<node id="45"/>
+		<node id="15"/>
+		<node id="44"/>
+		<node id="37"/>
+		<node id="12"/>
+		<node id="51"/>
+	</route>
+	<route id="2">
+		<node id="51"/>
+		<node id="11"/>
+        <!-- other stops in route 2 -->
+    </route>
+    <!-- routes 3, 4, and 5 -->
+</solution>
+```
