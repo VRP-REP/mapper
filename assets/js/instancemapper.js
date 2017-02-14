@@ -130,7 +130,7 @@ var plotRoutes = function (routes) {
     // if there's only one route, simply plot it in black
     if (routes.length == 1){
 
-        plotRoute(routes[0].sequence,"black");
+        plotRoute(routes[0].sequence,"black",0);
 
     } else { // otherwise, we'll be plotting multiple, so we need diff colors and a legend
 
@@ -138,7 +138,7 @@ var plotRoutes = function (routes) {
         var color = d3.scaleOrdinal(d3.schemeDark2).domain(routes.map(function(e){return e.id;}));
 
         // plot them
-        routes.forEach(function(e) {plotRoute(e.sequence,color(e.id));});
+        routes.forEach(function(e) {plotRoute(e.sequence,color(e.id),e.id);});
 
         // make the legend
         maing.append("g")
@@ -153,14 +153,34 @@ var plotRoutes = function (routes) {
             .orient("horizontal")
             .labelAlign("middle")
             .scale(color)
-            .labels(color.domain());
+            .labels(color.domain())
+            .on("cellclick", function(){
+                // get the swatch for the legend entry
+                var thisSwatch = d3.select(this).select("line");
+                // toggle display when clicked
+                thisSwatch.classed("hidden", !thisSwatch.classed("hidden"));
+                // do the same for the route
+                var d = +d3.select(this).select("text").text()
+                toggleRouteShown(d);
+            });
 
         maing.select(".legendRoutes")
             .call(legendRoutes);
+
+        // make legend entries show cursor and add an overlay to capture pointer events
+        var routeLegendCells = d3.selectAll(".legendRoutes .cell");
+        routeLegendCells
+            .style("cursor","pointer");
+        routeLegendCells
+            .append("rect")
+                .attr("fill","none")
+                .attr("width","15")
+                .attr("height","25")
+                .style("pointer-events","all")
     }
 }
 
-var plotRoute = function(route,color) {
+var plotRoute = function(route,color,rteId) {
     // draw arrows between consecutive nodes on route
     for (var i=1; i<route.length;i++){
         // nodes' IDs
@@ -205,8 +225,8 @@ var plotRoute = function(route,color) {
             .attr("x2",plotPoints.x2)
             .attr("y1",plotPoints.y1)
             .attr("y2",plotPoints.y2)
-            .attr("id",function(){return "line-"+(i-1)+"-"+i;})
-            .attr("class","arrow")
+            .attr("id",function(){return "rte-"+rteId+"-line-"+(i-1)+"-"+i;})
+            .attr("class","arrow route-"+rteId)
             .attr("marker-end","url(#arrow)");
     }
 }
@@ -319,5 +339,13 @@ var loadSampleData = function() {
             if (error_sol) throw error_sol;
             loadNewSolutionFile(solAsText);
         });
+    });
+}
+
+var toggleRouteShown = function(routeId) {
+
+    d3.selectAll(".arrow.route-"+routeId)
+        .classed("hidden", function (d, i) {
+        return !d3.select(this).classed("hidden");
     });
 }
