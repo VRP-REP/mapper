@@ -9,7 +9,8 @@ In this readme:
  - [The VRP-REP solution format](#sol-format)
 
 ## To use
-### If you don't have your own data <a name="dont-have-data"></a>
+<a name="dont-have-data"></a>
+### If you don't have your own data
 If you don't already have VRP-REP compliant datasets or solutions, select "Sample data".
 *Screenshot coming soon!*
 
@@ -17,7 +18,8 @@ From here, select "Plot sample dataset and solution" to view the Christofides *e
 
 You can also choose to download the source files for sample data using the "Download" button.
 
-### If you do have your own data <a name="do-have-data"></a>
+<a name="do-have-data"></a>
+### If you do have your own data
 If you have your own VRP-REP compliant instances and solutions, then from the [Mapper landing page](https://vrp-rep.github.io/mapper/), first select "Upload instance" to browse to and select a VRP-REP compliant dataset.
 *Updated screenshot coming soon!*
 
@@ -39,7 +41,8 @@ From the modal that appears, you have two options to input a solution (a route o
 
 Note that whenever a new solution is uploaded or a new route is entered, the existing routes will be cleared.
 
-## The VRP-REP Solution Format <a name="sol-format"></a>
+<a name="sol-format"></a>
+## The VRP-REP Solution Format
 The XML schema defining the VRP-REP solution format is [available here](http://vrp-rep.org/resources/download/6).
 
 A description of the format:
