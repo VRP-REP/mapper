@@ -154,14 +154,29 @@ var plotRoutes = function (routes) {
             .labelAlign("middle")
             .scale(color)
             .labels(color.domain())
-            .on("cellclick", function(d){toggleRouteShown(d)});
+            .on("cellclick", function(){
+                // get the swatch for the legend entry
+                var thisSwatch = d3.select(this).select("line");
+                // toggle display when clicked
+                thisSwatch.classed("hidden", !thisSwatch.classed("hidden"));
+                // do the same for the route
+                var d = +d3.select(this).select("text").text()
+                toggleRouteShown(d);
+            });
 
         maing.select(".legendRoutes")
             .call(legendRoutes);
 
-        // make legend entries have cursor
-        d3.selectAll(".legendRoutes .cell")
+        // make legend entries show cursor and add an overlay to capture pointer events
+        var routeLegendCells = d3.selectAll(".legendRoutes .cell");
+        routeLegendCells
             .style("cursor","pointer");
+        routeLegendCells
+            .append("rect")
+                .attr("fill","none")
+                .attr("width","15")
+                .attr("height","25")
+                .style("pointer-events","all")
     }
 }
 
