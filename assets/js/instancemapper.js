@@ -97,7 +97,7 @@ var makeViz = function (data) {
     // define scales
     x = d3.scaleLinear().domain([d3.min(data.map(function(e){return e.x;})),d3.max(data.map(function(e){return e.x;}))]).range([0, width]);
     y = d3.scaleLinear().domain([d3.min(data.map(function(e){return e.y;})),d3.max(data.map(function(e){return e.y;}))]).range([height, 0]);
-    var color = d3.scaleOrdinal(d3.schemeCategory10).domain(data.map(function(e){return e.type;}));
+    var color = d3.scaleOrdinal(d3.schemeCategory10).domain(data.map(function(e){return e.type;}).sort(compareNumbers));
 
     // nodes to plot
     var enteringE = maing.selectAll(".node")
@@ -290,4 +290,8 @@ var getRoute = function(routeNode) {
         result.push(+nodes[i].id);
     }
     return result;
+}
+
+function compareNumbers(a, b) {
+  return a - b;
 }
