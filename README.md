@@ -6,6 +6,7 @@ More about VRP-REP and the specification can be found on our [website](http://vr
 In this readme:
  - [How to use Mapper if you don't have your own data](#dont-have-data)
  - [How to use Mapper if you do have your own data](#do-have-data)
+ - [Toggling route display](#route-display)
  - [The VRP-REP solution format](#sol-format)
 
 ## To use
@@ -15,7 +16,7 @@ If you don't already have VRP-REP compliant datasets or solutions, select "Sampl
 
 ![Sample data][sampleData]
 
-[sampleData]: ./assets/images/sampleData.PNG "Sample data"
+[sampleData]: ./assets/images/sampleData.gif "Sample data"
 
 From here, select "Plot sample dataset and solution" to view the Christofides *et al.* (1979) CMT01 instance and its solution.
 
@@ -41,6 +42,14 @@ From the modal that appears, you have two options to input a solution (a route o
  2. You may simply input a sequence of integers into the text field. This sequence of integers should be separated either by commas or whitespace. After you input a sequence, hit the "Plot" button.
 
 Note that whenever a new solution is uploaded or a new route is entered, the existing routes will be cleared.
+
+<a name="route-display"></a>
+## Toggling route display
+If you have uploaded a solution file that contains more than one route, you can toggle the display of the routes by clicking on the routes' legend entries.
+
+![Toggle route display][routeToggle]
+
+[routeToggle]: ./assets/images/routeToggle.gif "Toggle route display"
 
 <a name="sol-format"></a>
 ## The VRP-REP Solution Format
