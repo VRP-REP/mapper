@@ -153,10 +153,15 @@ var plotRoutes = function (routes) {
             .orient("horizontal")
             .labelAlign("middle")
             .scale(color)
-            .labels(color.domain());
+            .labels(color.domain())
+            .on("cellclick", function(d){toggleRouteShown(d)});
 
         maing.select(".legendRoutes")
             .call(legendRoutes);
+
+        // make legend entries have cursor
+        d3.selectAll(".legendRoutes .cell")
+            .style("cursor","pointer");
     }
 }
 
@@ -205,7 +210,7 @@ var plotRoute = function(route,color,rteId) {
             .attr("x2",plotPoints.x2)
             .attr("y1",plotPoints.y1)
             .attr("y2",plotPoints.y2)
-            .attr("id",function(){return "line-"+(i-1)+"-"+i;})
+            .attr("id",function(){return "rte-"+rteId+"-line-"+(i-1)+"-"+i;})
             .attr("class","arrow route-"+rteId)
             .attr("marker-end","url(#arrow)");
     }
@@ -319,5 +324,13 @@ var loadSampleData = function() {
             if (error_sol) throw error_sol;
             loadNewSolutionFile(solAsText);
         });
+    });
+}
+
+var toggleRouteShown = function(routeId) {
+
+    d3.selectAll(".arrow.route-"+routeId)
+        .classed("hidden", function (d, i) {
+        return !d3.select(this).classed("hidden");
     });
 }
