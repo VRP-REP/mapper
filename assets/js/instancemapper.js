@@ -19,60 +19,7 @@ d3.select("#instance-upload").on("change", function () {
         var filereader = new window.FileReader();
         filereader.onload = function () {
 
-            // remove any existing map, and set flag to indicate no instance in memory
-            d3.select("#div-where-instance-goes").html("");
-            instanceRead = false;
-            data = null;
-            routes = [];
-
-            // read instance
-            var parser = new DOMParser();
-            var xmlDoc = parser.parseFromString(filereader.result,"text/xml");
-            var nodes = xmlDoc.getElementsByTagName("node");
-            data = [];
-            for (var i=0; i<nodes.length; i++){
-                data.push({
-                    id:+nodes[i].id,
-                    name:"node-"+nodes[i].id,
-                    type:nodes[i].attributes.type.nodeValue,
-                    x:+nodes[i].getElementsByTagName("cx")[0].textContent,
-                    y:+nodes[i].getElementsByTagName("cy")[0].textContent
-                });
-            }
-
-            // set the flag for whether an instance has been readAsText
-            instanceRead = true;
-
-            // enable the route plotting modal
-            d3.selectAll(".enable-on-instance-upload")
-                .attr("disabled",null);
-            d3.select("#route-input")
-                .attr("placeholder","Integers separated by commas or whitespace (e.g. \"0 1 2 3 0\")");
-            d3.select("#sol-upload-btn-text")
-                .text("");
-
-            // set the banner above the SVG
-            d3.select("#div-where-instance-goes")
-                .append("h1")
-                    .text(instanceName);
-
-            // make the viz
-            makeViz(data);
-
-            // define the arrowhead marker for later route plotting
-            var defs = svg.append("defs")
-            defs.append("marker")
-                .attr("id","arrow")
-                .attr("viewBox","0 -5 10 10")
-                .attr("refX",5)
-                .attr("refY",0)
-                .attr("markerWidth",4)
-                .attr("markerHeight",4)
-                .attr("orient","auto")
-                .append("path")
-                    .attr("d", "M0,-5L10,0L0,5")
-                    .attr("class","arrowHead")
-                    .attr("stroke","black");
+            loadNewInstanceFile(filereader.result);
 
         }
         filereader.readAsText(this.files[0]);
@@ -97,7 +44,7 @@ var makeViz = function (data) {
     // define scales
     x = d3.scaleLinear().domain([d3.min(data.map(function(e){return e.x;})),d3.max(data.map(function(e){return e.x;}))]).range([0, width]);
     y = d3.scaleLinear().domain([d3.min(data.map(function(e){return e.y;})),d3.max(data.map(function(e){return e.y;}))]).range([height, 0]);
-    var color = d3.scaleOrdinal(d3.schemeCategory10).domain(data.map(function(e){return e.type;}));
+    var color = d3.scaleOrdinal(d3.schemeCategory10).domain(data.map(function(e){return e.type;}).sort(compareNumbers));
 
     // nodes to plot
     var enteringE = maing.selectAll(".node")
@@ -146,27 +93,8 @@ d3.select("#solution-upload").on("change", function () {
         var filereader = new window.FileReader();
         filereader.onload = function () {
 
-            removeExistingRoutes();
+            loadNewSolutionFile(filereader.result);
 
-            // read solution
-            var parser = new DOMParser();
-            var xmlDoc = parser.parseFromString(filereader.result,"text/xml");
-            var solNode = xmlDoc.getElementsByTagName("solution")[0];
-            // store routes
-            var routeNodes = solNode.getElementsByTagName("route");
-            // and for each route
-            for (var i=0; i<routeNodes.length; i++) {
-                var routeNode = routeNodes[i];
-                // get the id and stops
-                var route = {
-                    id:+routeNodes[i].id,
-                    sequence:getRoute(routeNode)
-                };
-                // add it to routes object
-                routes.push(route);
-            }
-            // plot the routes
-            plotRoutes(routes);
         }
         $('#uploadSolutionModal').modal('hide');
         filereader.readAsText(this.files[0]);
@@ -290,4 +218,106 @@ var getRoute = function(routeNode) {
         result.push(+nodes[i].id);
     }
     return result;
+}
+
+function compareNumbers(a, b) {
+  return a - b;
+}
+
+var loadNewInstanceFile = function(fileAsText) {
+    // remove any existing map, and set flag to indicate no instance in memory
+    d3.select("#div-where-instance-goes").html("");
+    instanceRead = false;
+    data = null;
+    routes = [];
+
+    // read instance
+    var parser = new DOMParser();
+    var xmlDoc = parser.parseFromString(fileAsText,"text/xml");
+    var nodes = xmlDoc.getElementsByTagName("node");
+    data = [];
+    for (var i=0; i<nodes.length; i++){
+        data.push({
+            id:+nodes[i].id,
+            name:"node-"+nodes[i].id,
+            type:nodes[i].attributes.type.nodeValue,
+            x:+nodes[i].getElementsByTagName("cx")[0].textContent,
+            y:+nodes[i].getElementsByTagName("cy")[0].textContent
+        });
+    }
+
+    // set the flag for whether an instance has been readAsText
+    instanceRead = true;
+
+    // enable the route plotting modal
+    d3.selectAll(".enable-on-instance-upload")
+        .attr("disabled",null);
+    d3.select("#route-input")
+        .attr("placeholder","Integers separated by commas or whitespace (e.g. \"0 1 2 3 0\")");
+    d3.select("#sol-upload-btn-text")
+        .text("");
+
+    // set the banner above the SVG
+    d3.select("#div-where-instance-goes")
+        .append("h1")
+            .text(instanceName);
+
+    // make the viz
+    makeViz(data);
+
+    // define the arrowhead marker for later route plotting
+    var defs = svg.append("defs")
+    defs.append("marker")
+        .attr("id","arrow")
+        .attr("viewBox","0 -5 10 10")
+        .attr("refX",5)
+        .attr("refY",0)
+        .attr("markerWidth",4)
+        .attr("markerHeight",4)
+        .attr("orient","auto")
+        .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .attr("class","arrowHead")
+            .attr("stroke","black");
+}
+
+var loadNewSolutionFile = function (fileAsText) {
+
+    removeExistingRoutes();
+
+    // read solution
+    var parser = new DOMParser();
+    var xmlDoc = parser.parseFromString(fileAsText,"text/xml");
+    var solNode = xmlDoc.getElementsByTagName("solution")[0];
+    // store routes
+    var routeNodes = solNode.getElementsByTagName("route");
+    // and for each route
+    for (var i=0; i<routeNodes.length; i++) {
+        var routeNode = routeNodes[i];
+        // get the id and stops
+        var route = {
+            id:+routeNodes[i].id,
+            sequence:getRoute(routeNode)
+        };
+        // add it to routes object
+        routes.push(route);
+    }
+    // plot the routes
+    plotRoutes(routes);
+}
+
+var loadSampleData = function() {
+    var dataFile = "data/CMT01_dataset.xml",
+        solFile = "data/CMT01_solution.xml";
+    $('#sampleDataModal').modal('hide');
+    instanceName = dataFile.substring(dataFile.indexOf("/")+1);
+
+    d3.text(dataFile, function(error_data, dataAsText) {
+        if (error_data) throw error_data;
+        loadNewInstanceFile(dataAsText);
+        d3.text(solFile, function(error_sol, solAsText) {
+            if (error_sol) throw error_sol;
+            loadNewSolutionFile(solAsText);
+        });
+    });
 }
