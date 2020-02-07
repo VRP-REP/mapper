@@ -308,9 +308,17 @@ var loadNewSolutionFile = function (fileAsText) {
     // read solution
     var parser = new DOMParser();
     var xmlDoc = parser.parseFromString(fileAsText,"text/xml");
-    var solNode = xmlDoc.getElementsByTagName("solution")[0];
+    var solNode = xmlDoc.getElementsByTagName("solution");
     // store routes
-    var routeNodes = solNode.getElementsByTagName("route");
+    var routeNodes = null;
+    if (solNode.length==0) {
+        // may be that route nodes are not contained in a solution node
+        // this is poor form, but we can handle it
+        routeNodes = xmlDoc.getElementsByTagName("route");
+    } else {
+        // input was as expected
+        routeNodes = solNode[0].getElementsByTagName("route");
+    }
     // and for each route
     for (var i=0; i<routeNodes.length; i++) {
         var routeNode = routeNodes[i];
