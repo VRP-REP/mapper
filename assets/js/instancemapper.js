@@ -31,6 +31,14 @@ function print(astr) {
     console.log(astr);
 }
 
+var getColorIDer = function(e) {
+    if (e.cs_type==null){
+        return e.type
+    } else {
+        return e.type+" ("+e.cs_type+")";
+    }
+}
+
 var makeViz = function (data) {
 
     // define circle radius based on width
@@ -48,7 +56,7 @@ var makeViz = function (data) {
     // define scales
     x = d3.scaleLinear().domain([d3.min(data.map(function(e){return e.x;})),d3.max(data.map(function(e){return e.x;}))]).range([0, width]);
     y = d3.scaleLinear().domain([d3.min(data.map(function(e){return e.y;})),d3.max(data.map(function(e){return e.y;}))]).range([height, 0]);
-    var color = d3.scaleOrdinal(d3.schemeCategory10).domain(data.map(function(e){return e.type;}).sort(compareNumbers));
+    var color = d3.scaleOrdinal(d3.schemeCategory10).domain(data.map(function(e){return getColorIDer(e)}).sort());
 
     // nodes to plot
     var enteringE = maing.selectAll(".node")
@@ -60,7 +68,7 @@ var makeViz = function (data) {
     var circles = enteringE.append("circle")
         .attr("r",circleRadius)
         .attr("id",function(d){return "circle-"+d.id;})
-        .attr("fill",function(d){return color(d.type)})
+        .attr("fill",function(d){return color(getColorIDer(d))})
         .attr("stroke","white")
         .append("title")
             .text(function(d){
@@ -248,6 +256,17 @@ function compareNumbers(a, b) {
   return a - b;
 }
 
+
+function getCSType(e) {
+
+    customE = e.getElementsByTagName("custom");
+    if (customE.length == 0){
+        return null;
+    } else {
+        return customE[0].getElementsByTagName("cs_type")[0].textContent
+    }
+}
+
 var loadNewInstanceFile = function(fileAsText) {
     // remove any existing map, and set flag to indicate no instance in memory
     d3.select("#div-where-instance-goes").html("");
@@ -266,7 +285,8 @@ var loadNewInstanceFile = function(fileAsText) {
             name:"node-"+nodes[i].id,
             type:nodes[i].attributes.type.nodeValue,
             x:+nodes[i].getElementsByTagName("cx")[0].textContent,
-            y:+nodes[i].getElementsByTagName("cy")[0].textContent
+            y:+nodes[i].getElementsByTagName("cy")[0].textContent,
+            cs_type:getCSType(nodes[i])
         });
     }
 
