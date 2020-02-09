@@ -27,6 +27,10 @@ d3.select("#instance-upload").on("change", function () {
     } else { console.log("Error with file upload. Please try again."); }
 });
 
+function print(astr) {
+    console.log(astr);
+}
+
 var makeViz = function (data) {
 
     // define circle radius based on width
